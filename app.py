@@ -59,6 +59,7 @@ def page_not_found(e):
 def page_not_found(e):
     return render_template("500.html", title="page not found"), 500
 
+#yexy takes yes went wrong 
 
 
 @app.route('/upload')
