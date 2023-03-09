@@ -1,0 +1,29 @@
+*
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.loc-img-size
+{
+    width: 50%;
+}
+
+.loc-viewer{
+    
+    width: 100%;
+    height: 70%;
+}
+
+.loc-no-upload-yet {
+    background-image: url(../imgs/hatching.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 50vh;
+}
+
+.loc-size{
+    width: auto;
+    height: 50%;
+}
