@@ -1,10 +1,16 @@
+#image file handling 
 from io import BytesIO
+import base64
+#normal code
 from flask import Flask, render_template,request, redirect, url_for,send_file, flash
 from datetime import datetime
-#import sqla
+#import sqlachemy
 from flask_sqlalchemy import SQLAlchemy
 import calendar
-import base64
+#wtforms here 
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, EmailField
+from wtforms.validators import data_required
 
 app = Flask(__name__)
 
@@ -19,6 +25,26 @@ def b64encode(data):
 
 # Register the custom filter with Jinja2
 app.jinja_env.filters['b64encode'] = b64encode
+
+#wtForm form classes 
+class NamerForm(FlaskForm):
+    name = StringField("what's your name", validators=[data_required()])
+    submit = SubmitField("Submit")
+
+#User form 
+class UserForm(FlaskForm):
+    name = StringField("name",validators=[data_required()])
+    email = EmailField("email",validators=[data_required()])
+    submit = SubmitField("Submit")
+
+# All sqlalchemy classes here
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class Images(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,6 +64,28 @@ month = d.month
 dt = d.strftime("%Y-%m-%d %H:%M:%S")
 # Generate the calendar for the current month
 cal = calendar.monthcalendar(year, month)
+
+'''
+will remove some of these routes when done
+'''
+
+@app.route('/name', methods=['POST', 'GET'])
+def name():
+    name = None
+    form = NamerForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data=''
+        flash("Form Submit successful")
+
+    return render_template('name.html',
+                           title='name',
+                           form=form,
+                           name=name)
+
+@app.route('/user/add', methods=['GET', 'POST'])
+def add_user():
+    return render_template("add_user.html")
 
 
 @app.route('/')
